@@ -34,6 +34,8 @@
 
 ​			serverip： 服务器的IP地址
 
+​		设置的IP地址，以本地网络的物理地址为准，上面选择的网卡也需要是本地网路的网卡，需要和WIFI的网络的网卡区分开。
+
 
 
 ## 二：文件系统
@@ -124,7 +126,17 @@
 
 ## 三：内核的编译加载
 
-### 		1.zImage制作成uImage
+### 1.编译
+
+​	拷贝arch/arm/congfig下的defincong 到 顶级目录下.config
+
+​	make ARCH=arm menucofnig配置
+
+​	make ARCH=arm CROSS_COMPILE= xxx 
+
+​				xxx交叉编译工具：opt/FriendlyARM/toolschain/4.5.1/bin/arm-none-linux-gnueabi-
+
+### 		2.zImage制作成uImage
 
 ​		./mkimage -A arm -O linux -T kernel -C none -a 30008000 -e 30008000 -n linux-3.0.8 -d zImage uImage
 
@@ -134,9 +146,15 @@
 
 ​				make uImage LOADADDR=0X40008000
 
-### 	   2.查看启动文件的依赖项
+### 	   3.查看启动文件的依赖项
 
-​				readelf -d linuxrc  | grep NEEDED
+​		readelf -d linuxrc  | grep NEEDED
+
+### 4.uboot烧写
+
+​	sudo dd iflag=dsync oflag=dsync if=tiny210-uboot1.bin of=/dev/sdb seek=1
+
+​	将uboot写入SD第一扇区。 uboot的启动从第一扇区开始。
 
 
 
@@ -173,6 +191,10 @@
 ### 	4.kernel下载地址
 
 ​	       [git@github.com:2019linux/linux3.0.8-youshanzhibi.git]()
+
+### 5.交叉编译工具
+
+​			[git@github.com:2019linux/tools.git]()
 
 
 
